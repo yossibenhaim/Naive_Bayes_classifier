@@ -12,5 +12,5 @@ class Printer:
         "3 - Train a new model\n")
 
     @staticmethod
-    def a():
-        pass
+    def file_name_request():
+        print("🔍 Enter the full file path to open (e.g., C:/Users/YourName/Desktop/data.csv):")

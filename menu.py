@@ -9,4 +9,5 @@ class Menu:
         choice = input()
         x = MenuRouter.get_routes(choice)
         if x:
-            x()
+            print(x())
+Menu.start_menu()
