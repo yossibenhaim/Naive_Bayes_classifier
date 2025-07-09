@@ -1,3 +1,6 @@
+from test_algorithm import Algorithm
+
+
 class CheckProbability:
 
     def __init__(self,data_dict, all_data):
@@ -6,6 +9,10 @@ class CheckProbability:
 
     def check(self):
         a = self.create_dict()
+        print(self.check1(a))
+
+
+    def check1(self, a):
         if not a:
             return "error"
         b = []
@@ -32,8 +39,10 @@ class CheckProbability:
         result_Yes *= (len(self.all_data[(self.all_data.index == "yes")]) / len(self.all_data))
         if result_No > result_Yes:
             print(f"the probability is No = {result_No}")
+            return "no"
         else:
             print(f"the probability is Yes = {result_Yes}")
+            return "yes"
 
     def create_dict(self):
         my_dict = {}
@@ -44,3 +53,21 @@ class CheckProbability:
             if choice == "1":
                 column = input("send name column\n")
                 my_dict[column] = input("send name type\n")
+
+
+    def test(self, data):
+        count = 0
+        count_true = 0
+        x = Algorithm()
+        data_list = x.creat_list_of_dict(data)
+        data_list1 = x.creat_list_of_dict1(data)
+        print(data_list1)
+        for i in range(len(data_list)):
+            count += 1
+            result = self.check1(data_list[i])
+            if result == data_list1[i]["Buy_Computer"]:
+                count_true += 1
+        print("count=",count)
+        print("count_true=", count_true)
+
+
