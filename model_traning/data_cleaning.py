@@ -5,5 +5,9 @@ class DataCleaning:
     def __init__(self, data):
         self.data = data
 
-    def change_index(self, new_index):
-        self.data.set_index(new_index)
+    def change_index(self):
+        new_index = self.request_column_name()
+        self.data.set_index(new_index, inplace=True)
+
+    def request_column_name(self):
+        return input("send your choice column")
