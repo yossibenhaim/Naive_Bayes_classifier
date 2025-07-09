@@ -37,5 +37,5 @@ class ModelTraining:
                     self.data_dict[z][i][k]["is_true"] = len(self.data[(self.data[i] == k) & (self.data.index == z)])
                     self.data_dict[z][i][k]["probability"] = self.data_dict[z][i][k]["is_true"] / self.data_dict[z][i][k]["count"]
 
-    def return_data_dict(self):
-        return self.data_dict
+    # def return_data_dict(self):
+    #     return self.data_dict

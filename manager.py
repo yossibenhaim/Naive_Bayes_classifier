@@ -1,9 +1,10 @@
+import pandas
 from model_traning.DAL import DAL
 from printer import Printer
 from menu import Menu
-# from menu_router import MenuRouter
-from model_traning.model_training import  ModelTraining
+from model_traning.model_training import ModelTraining
 from model_traning.data_cleaning import DataCleaning
+from check_probability import CheckProbability
 
 class Manager:
 
@@ -13,16 +14,16 @@ class Manager:
 
 
         self.routes_start_nemu = {
-            "1": "1",
+            "1": lambda data: CheckProbability(self.data_dict,self.data).check(),
             "2": "2",
-            "3": "create_new_data",
+            "3": self.create_new_data,
             "4": "exit",
         }
 
         self.routes_manager_nemu_add_data = {
             "1": self.print_data_frame,
             "2": lambda data: DataCleaning(data).change_index(),
-            "3": lambda data: ModelTraining(data).return_data_dict,
+            "3": lambda data: ModelTraining(self.data),
             "4": "exit",
         }
 
@@ -35,7 +36,10 @@ class Manager:
             if x == "exit":
                 Printer.exit()
                 break
-            getattr(self,x)(self.data)
+            if x:
+                result = x(self.data)
+                if isinstance(result, pandas.DataFrame):
+                    self.data = result
 
 
     def create_new_data(self, data):
@@ -55,8 +59,11 @@ class Manager:
                 return
             if x:
                 result = x(self.data)
-                if result:
-                    self.data_dict = result()
+                print("result =",result)
+                if isinstance(result, pandas.DataFrame):
+                    self.data = result
+                if isinstance(result, ModelTraining):
+                    self.data_dict = result.data_dict
             else:
                 Printer.invalid_selection()
 
