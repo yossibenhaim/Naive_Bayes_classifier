@@ -5,11 +5,9 @@ class Menu:
 
     @staticmethod
     def start_menu():
-        Printer.start_menu()
-        choice = input()
-        x = MenuRouter.get_routes_start_nemu(choice)
-        if x:
-            x()
-        else:
-            Printer.invalid_selection()
-Menu.start_menu()
+        stop_loop = True
+        while stop_loop:
+            Printer.start_menu()
+            choice = input()
+            if choice in MenuRouter.routes_start_nemu:
+                return choice

@@ -4,7 +4,8 @@ class MenuRouter:
     routes_start_nemu = {
         "1": "1",
         "2": "2",
-        "3": Manager_Model_Traning,
+        "3": "create_new_data",
+        "4": "exit",
     }
     routes_manager_nemu_add_data = {
         "1": Manager_Model_Traning.print_data_frame,

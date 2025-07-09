@@ -25,3 +25,7 @@ class Printer:
     @staticmethod
     def invalid_selection():
         print("Invalid selection - please choose again")
+
+    @staticmethod
+    def exit():
+        print("Goodbye! You have exited the program")
