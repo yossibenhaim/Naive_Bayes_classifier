@@ -2,9 +2,9 @@
 
 class MenuRouter:
     routes = {
-        "1": "",
-        "2": "",
-        "3": "",
+        "1": "1",
+        "2": "2",
+        "3": "3",
     }
 
     @staticmethod

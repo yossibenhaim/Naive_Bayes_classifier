@@ -1,10 +1,12 @@
 from printer import Printer
-
+from menu_router import MenuRouter
 
 class Menu:
 
     @staticmethod
     def start_menu():
-        choice = input(Printer.start_menu())
-        if choice == "1":
-            pass
+        Printer.start_menu()
+        choice = input()
+        x = MenuRouter.get_routes(choice)
+        if x:
+            x()
