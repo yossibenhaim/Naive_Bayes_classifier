@@ -1,4 +1,4 @@
-from DAL import DAL
+from model_traning.DAL import DAL
 
 class MenuRouter:
     routes = {
