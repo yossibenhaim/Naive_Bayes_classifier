@@ -9,7 +9,8 @@ class Printer:
         print("Main Menu:\n"
         "1 - Check probability\n"
         "2 - Test the classifier\n"
-        "3 - Train a new model\n")
+        "3 - Train a new model\n"
+        "4 - Exit from program")
 
     @staticmethod
     def file_name_request():
@@ -17,10 +18,11 @@ class Printer:
 
     @staticmethod
     def menu_manager_model_traning():
-        print("Admin Menu - Manage Data\n"
-              "1 - Print new data\n"
-              "2 - Clear existing data \n"
-              "3 - Exit")
+        print("Management Menu - Data Management\n"
+        "1 - Print the new data\n"
+        "2 - Clear the new table\n"
+        "3 - Generate statistics on the new table\n"
+        "4 - Exit")
 
     @staticmethod
     def invalid_selection():

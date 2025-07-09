@@ -1,10 +1,7 @@
 import pandas as pd
-
 from printer import Printer
 
-
 class DAL:
-
 
     @staticmethod
     def file_name_request():
@@ -15,5 +12,8 @@ class DAL:
     @staticmethod
     def reading_csv_file():
         name_file = DAL.file_name_request()
-        date_frame = pd.read_csv(name_file)
+        try:
+            date_frame = pd.read_csv(name_file)
+        except:
+            return "Error"
         return date_frame
