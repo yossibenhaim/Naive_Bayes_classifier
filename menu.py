@@ -7,7 +7,9 @@ class Menu:
     def start_menu():
         Printer.start_menu()
         choice = input()
-        x = MenuRouter.get_routes(choice)
+        x = MenuRouter.get_routes_start_nemu(choice)
         if x:
-            print(x())
+            x()
+        else:
+            Printer.invalid_selection()
 Menu.start_menu()

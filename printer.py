@@ -14,3 +14,14 @@ class Printer:
     @staticmethod
     def file_name_request():
         print("🔍 Enter the full file path to open (e.g., C:/Users/YourName/Desktop/data.csv):")
+
+    @staticmethod
+    def menu_manager_model_traning():
+        print("Admin Menu - Manage Data\n"
+              "1 - Print new data\n"
+              "2 - Clear existing data \n"
+              "3 - Exit")
+
+    @staticmethod
+    def invalid_selection():
+        print("Invalid selection - please choose again")
