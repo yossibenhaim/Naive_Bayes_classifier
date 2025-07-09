@@ -15,7 +15,7 @@ class Manager:
 
         self.routes_start_nemu = {
             "1": lambda data: CheckProbability(self.data_dict,self.data).check(),
-            "2": "2",
+            "2": lambda daya: CheckProbability(self.data_dict,self.data).test(self.data),
             "3": self.create_new_data,
             "4": "exit",
         }
