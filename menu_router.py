@@ -1,2 +1,8 @@
+
+
 class MenuRouter:
-    pass
+    routes = {
+        "1": "",
+        "2": "",
+        "3": "",
+    }
