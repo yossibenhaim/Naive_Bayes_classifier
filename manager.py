@@ -3,7 +3,7 @@ from printer import Printer
 from menu import Menu
 # from menu_router import MenuRouter
 from model_traning.model_training import  ModelTraining
-
+from model_traning.data_cleaning import DataCleaning
 
 class Manager:
 
@@ -21,8 +21,9 @@ class Manager:
 
         self.routes_manager_nemu_add_data = {
             "1": self.print_data_frame,
-            "2": lambda data: ModelTraining(data).return_data_dict,
-            "3": "exit",
+            "2": lambda data: DataCleaning(data).change_index(),
+            "3": lambda data: ModelTraining(data).return_data_dict,
+            "4": "exit",
         }
 
     def start(self):
@@ -44,18 +45,20 @@ class Manager:
 
     def menu_new_model(self):
 
-        Printer.menu_manager_model_traning()
-        choice = input()
-        x = self.get_routes_manager_nemu_add_data(choice)
-        if x == "exit":
-            Printer.exit()
-            return
-        if x:
-            result = x(self.data)
-            if result:
-                self.data_dict = result
-        else:
-            Printer.invalid_selection()
+        choice = ""
+        while choice != "exit":
+            Printer.menu_manager_model_traning()
+            choice = input()
+            x = self.get_routes_manager_nemu_add_data(choice)
+            if x == "exit":
+                Printer.exit()
+                return
+            if x:
+                result = x(self.data)
+                if result:
+                    self.data_dict = result()
+            else:
+                Printer.invalid_selection()
 
     def print_data_frame(self, data):
         print(self.data_dict)
