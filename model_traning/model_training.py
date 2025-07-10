@@ -2,8 +2,10 @@ class ModelTraining:
 
     def __init__(self, data):
         self.data = data
+        self.data_dict = {}
         index_value_counts = self.data.index.value_counts()
-        self.data_dict = {index_value_counts.index[0]: {}, index_value_counts.index[1]: {}}
+        for key in index_value_counts.index:
+             self.data_dict[key] = {}
 
         for current in self.data_dict:
             for column in self.data:
