@@ -7,28 +7,36 @@ class CheckProbability:
         self.data_dict = data_dict
         self.all_data = all_data
 
-    def check(self):
+
+    def check(self, data):
         a = self.create_dict()
         print(self.check1(a))
 
 
     def check1(self, a):
+        print(a)
         if not a:
             return "error"
+        if not self.data_dict:
+            return "Error!"
         b = []
         for k, v in a.items():
             for x in self.data_dict:
                 if x == "Yes":
                     continue
-                b.append(self.data_dict[x][k][v]["probability"])
-
+                try:
+                    b.append(self.data_dict[x][k][v]["probability"])
+                except KeyError:
+                    b.append(1e-6)
         c = []
         for k, v in a.items():
             for x in self.data_dict:
                 if x == "No":
                     continue
-                c.append(self.data_dict[x][k][v]["probability"])
-
+                try:
+                    c.append(self.data_dict[x][k][v]["probability"])
+                except KeyError:
+                    c.append(1e-6)
         result_No = 1
         for x in b:
             result_No *= x
@@ -56,12 +64,12 @@ class CheckProbability:
 
 
     def test(self, data):
+        print(data)
         count = 0
         count_true = 0
         x = Algorithm()
         data_list = x.creat_list_of_dict(data)
         data_list1 = x.creat_list_of_dict1(data)
-        print(data_list1)
         for i in range(len(data_list)):
             count += 1
             result = self.check1(data_list[i])

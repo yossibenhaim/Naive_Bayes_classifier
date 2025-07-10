@@ -16,6 +16,8 @@ class ModelTraining:
                 value_counts = self.data.loc[self.data.index == current, column].value_counts()
                 for row, value in value_counts.items():
                     count_true = len(self.data[(self.data[column] == row) & (self.data.index == current)])
-                    self.data_dict[current][column][row] = {"count": value, "is_true": count_true, "probability": 0}
+                    count_current = len(self.data[self.data.index == current])
+                    self.data_dict[current][column][row] = {"count": count_current, "is_true": count_true, "probability": 0}
                     probability = self.data_dict[current][column][row]["is_true"] / self.data_dict[current][column][row]["count"]
                     self.data_dict[current][column][row]["probability"] = probability
+        print(self.data_dict)
