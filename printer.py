@@ -31,3 +31,13 @@ class Printer:
     @staticmethod
     def exit():
         print("Goodbye! You have exited the program")
+
+    @staticmethod
+    def print_data_frame(data):
+        print(data)
+
+    @staticmethod
+    def print_data_dict(data):
+        print(data)
+
+
