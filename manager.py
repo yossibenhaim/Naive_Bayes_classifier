@@ -13,7 +13,7 @@ class Manager:
 
     def load_csv(self):
         url = input("send url to load a csv")
-        self._data_frame = pd.read_csv(r"C:\Users\user\Downloads\mushroom.csv")
+        self._data_frame = pd.read_csv(fr"{url}")
 
     def clean_data(self):
         self._data_frame = self._class_Clean_data.cleaning_data(self._data_frame)
