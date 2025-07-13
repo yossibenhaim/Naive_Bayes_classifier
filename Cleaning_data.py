@@ -5,8 +5,8 @@ class Cleaning_data:
 
     def cleaning_data(self, data):
         self.data_frame = data
-        self.data_frame.set_index(self.choice_column())
-
+        self.data_frame = self.data_frame.set_index(self.choice_column())
+        return self.data_frame
 
 
 
