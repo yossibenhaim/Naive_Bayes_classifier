@@ -1,6 +1,6 @@
 class Cleaning_data:
 
-    def __int__(self):
+    def __init__(self):
         self.data_frame = None
 
     def cleaning_data(self, data):
