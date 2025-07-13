@@ -13,13 +13,19 @@ class Manager:
 
     def load_csv(self):
         url = input("send url to load a csv")
-        self._data_frame = pd.read_csv(r"C:\Users\user\Downloads\buy_computer.csv")
+        self._data_frame = pd.read_csv(r"C:\Users\user\Downloads\mushroom.csv")
 
     def clean_data(self):
         self._data_frame = self._class_Clean_data.cleaning_data(self._data_frame)
 
     def create_probability(self):
-        self._class_probability.create_probability(self._data_frame)
+        test = Test_classifier(self._class_probability)
+        len_data_probability = int(len(self._data_frame) * 0.7)
+        data_to_probability = self._data_frame.iloc[:len_data_probability]
+        data_to_test_probability = self._data_frame.iloc[len_data_probability:]
+        self._class_probability.create_probability(data_to_probability)
+        test.test(data_to_test_probability)
+
 
     def create_check_probability(self):
         test = Test_classifier(self._class_probability)

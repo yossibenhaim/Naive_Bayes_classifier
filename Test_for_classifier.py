@@ -1,6 +1,7 @@
 
+
 class Test_classifier:
-    def __init__(self, model):
+    def __init__(self, model ):
         self._model = model
 
     def check_probability(self, dict_row):
@@ -26,4 +27,17 @@ class Test_classifier:
             print(f"Class '{class_name}' probability: {prob_value}")
         best_class = max(class_probs, key=class_probs.get)
         return best_class
+
+    def test(self, data_frame):
+        count = 0
+        for idx, row in data_frame.iterrows():
+            result = self.check_probability(row.to_dict())
+            if result == idx:
+                count += 1
+        accuracy = count / len(data_frame)
+        print(f"Accuracy: {accuracy * 100:.2f}%")
+        return accuracy
+
+
+
 
