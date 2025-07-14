@@ -1,47 +1,69 @@
-import pandas
 from fastapi import FastAPI
-from Probability_Classifier import Probability
-from Test_for_classifier import Test_classifier
-from Cleaning_data import Cleaning_data
+from server.Probability_Classifier import Probability
+from server.Test_for_classifier import Test_classifier
+from server.Cleaning_data import Cleaning_data
+from server.load_csv import LoadCsv
 from pydantic import BaseModel
-from typing import List, Dict, Any
-
 
 app = FastAPI()
 
+class CsvUrl(BaseModel):
+    url: str
+
+class CsvColumn(BaseModel):
+    column: str
+
+class RowInput(BaseModel):
+    row: dict
 
 
+@app.post("/csv/load")
+def read_csv(url: CsvUrl):
+    csv = LoadCsv()
+    data = csv.load_csv(url.url)
+    csv.saving_data_csv(data)
+    return {}
 
-class DataFrameInput(BaseModel):
-    data_frame: List[Dict[str, Any]]
+@app.post("/csv/columns")
+def clean_data_from(column:CsvColumn):
+    csv = LoadCsv()
+    clean = Cleaning_data(csv.read_data_csv())
+    new_data = clean.cleaning_data(column.column)
+    csv.saving_data_csv(new_data)
+    return {}
 
-class DataDictInput(BaseModel):
-    data_dict: Dict[str, Dict[str, Dict[str, Dict[str, float]]]]
-    data_frame: List[Dict[str, Any]]
-
-class CheckInput(BaseModel):
-    data_dict: Dict[str, Dict[str, Dict[str, Dict[str, float]]]]
-    dict_row: Dict[str, Dict[str, str]]
-
-@app.post("/clean_data")
-def clean_data_from(data : DataFrameInput):
-    df = pandas.DataFrame(data.data_frame)
-    clean = Cleaning_data()
-    new_data = clean.cleaning_data(df)
-    return {"result":new_data}
-
-@app.post("/probability")
-def get_probability(data : DataFrameInput):
-    df = pandas.DataFrame(data.data_frame)
+@app.post("/model/train")
+def post_probability():
+    csv = LoadCsv()
+    data = csv.read_data_csv()
     probability = Probability()
-    return {"result":probability.create_probability(df)}
+    probability_data = probability.create_probability(data)
+    csv.saving_probability(probability_data)
+    return {}
 
-@app.post("/test")
-def test_data(data : DataDictInput):
-    test = Test_classifier(data.data_dict)
-    return {"result":test.test(data.data_frame)}
+@app.post("/model/test")
+def test_probability():
+    csv = LoadCsv()
+    probability_data = csv.read_probability_dict()
+    test = Test_classifier(probability_data)
+    test.test(csv.read_data_csv())
+    return {}
 
-@app.post("/check")
-def check_probability(input_data: CheckInput):
-    test = Test_classifier(input_data.data_dict)
-    return {"result":test.check_probability(input_data.dict_row)}
+@app.post("/model/check")
+def check_probability(dict_row : RowInput):
+    csv = LoadCsv()
+    probability_data = csv.read_probability_dict()
+    print("probability_data:", probability_data)
+    test = Test_classifier(probability_data)
+    print(test.check_probability(dict_row.row))
+    return {}
+
+@app.get("/csv/preview")
+def return_data_frame():
+    csv = LoadCsv()
+    data = csv.read_data_csv()
+    name_index = data.index.name
+    if name_index:
+        return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
+    else:
+        return {"result": data.reset_index().to_dict("records"), "name_index": "index"}

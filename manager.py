@@ -1,54 +1,67 @@
 import pandas as pd
-from Probability_Classifier import Probability
-from Cleaning_data import Cleaning_data
-from Test_for_classifier import Test_classifier
+import requests
 
 class Manager:
 
     def __init__(self):
-        self._data_frame = None
-        self._data_probability = None
-        self._class_probability = Probability()
-        self._class_Clean_data = Cleaning_data()
+        self._url = "http://127.0.0.1:8000"
 
-    def load_csv(self):
-        url = input("send url to load a csv")
-        self._data_frame = pd.read_csv(fr"{url}")
+    def load_csv_and_process(self):
+        url = {"url" : input("send your a url")}
+        response = requests.post(fr"{self._url}/csv/load", json=url)
+        return response if response.status_code == 200 else "error:"
+
+
 
     def clean_data(self):
-        self._data_frame = self._class_Clean_data.cleaning_data(self._data_frame)
+        name_column = {"column": self.choice_column()}
+        response = requests.post(fr"{self._url}/csv/columns", json=name_column)
+        return response if response.status_code == 200 else "error:"
+
 
     def create_probability(self):
-        test = Test_classifier(self._class_probability)
-        len_data_probability = int(len(self._data_frame) * 0.7)
-        data_to_probability = self._data_frame.iloc[:len_data_probability]
-        data_to_test_probability = self._data_frame.iloc[len_data_probability:]
-        self._class_probability.create_probability(data_to_probability)
-        test.test(data_to_test_probability)
+        response = requests.post(fr"{self._url}/model/train")
+        return response if response.status_code == 200 else "error:"
+
 
 
     def create_check_probability(self):
-        test = Test_classifier(self._class_probability)
-        dict_row = self.create_dict_to_check()
-        result = test.check_probability(dict_row)
-        print(f"\nPredicted class: {result}")
+        response = requests.post(fr"{self._url}/model/check", json=self.create_dict_to_check())
+        return response if response.status_code == 200 else "error:"
+
+
+    def return_data_frame(self):
+        response = requests.get(fr"{self._url}/csv/preview")
+        if response.status_code == 200:
+            dataframe = pd.DataFrame(response.json()["result"])
+            dataframe = dataframe.set_index(response.json()["name_index"])
+            return dataframe
+        return None
 
     def create_dict_to_check(self):
-        if self._data_frame is None:
-            print("Error:")
-            return {}
+        dataframe = self.return_data_frame()
+        if dataframe is not None:
+            dict_row = {}
+            columns = dataframe.columns
 
-        dict_row = {}
-        columns = self._data_frame.columns
+            for column in columns:
+                if column == "id":
+                    continue
+                unique_values = dataframe[column].unique()
+                print(f"\n {column}: {list(unique_values)}")
+                value = input(f" '{column}': ")
+                dict_row[column] = value
+            return dict_row
+        else:
+            return "error:"
 
-        for column in columns:
-            if column == "id":
-                continue
-            unique_values = self._data_frame[column].unique()
-            print(f"\n {column}: {list(unique_values)}")
-            value = input(f" '{column}': ")
-            dict_row[column] = value
-
-        return dict_row
-
+    def choice_column(self):
+        dataframe = self.return_data_frame()
+        columns = dataframe.columns
+        stop_loop = True
+        while stop_loop:
+            column = input(f"send your choice in {columns}")
+            if column in columns:
+                stop_loop = False
+        return column
 
