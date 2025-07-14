@@ -29,8 +29,10 @@ class Menu:
             elif choice == "3":
                 self.Manager.create_probability()
             elif choice == "4":
-                self.Manager.create_check_probability()
+                self.Manager.test_probability()
             elif choice == "5":
+                self.Manager.check_probability()
+            elif choice == "6":
                 stop_loop = False
 
 
@@ -46,7 +48,8 @@ class Menu:
         print("2. Clean data (choose index column)")
         print("3. Train classifier (Naive Bayes)")
         print("4. Test classification on new row")
-        print("5. Exit\n")
+        print("5. Check classification on new row")
+        print("6. Exit\n")
 
 
 manager = Manager()

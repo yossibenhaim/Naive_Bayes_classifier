@@ -23,10 +23,15 @@ class Manager:
         response = requests.post(fr"{self._url}/model/train")
         return response if response.status_code == 200 else "error:"
 
+    def test_probability(self):
+        response = requests.post(fr"{self._url}/model/test")
+        print(response.json()["result"])
+        return response if response.status_code == 200 else "error:"
 
-
-    def create_check_probability(self):
-        response = requests.post(fr"{self._url}/model/check", json=self.create_dict_to_check())
+    def check_probability(self):
+        dict_row = {"row":self.create_dict_to_check()}
+        response = requests.post(fr"{self._url}/model/check", json=dict_row)
+        print(response.json()["result"])
         return response if response.status_code == 200 else "error:"
 
 

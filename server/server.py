@@ -45,18 +45,20 @@ def post_probability():
 def test_probability():
     csv = LoadCsv()
     probability_data = csv.read_probability_dict()
-    test = Test_classifier(probability_data)
-    test.test(csv.read_data_csv())
-    return {}
+    data_frame = csv.read_data_csv()
+    test = Test_classifier(probability_data, data_frame)
+    print(csv.read_data_csv())
+    result = test.test(csv.read_data_csv())
+    return {"result": result}
 
 @app.post("/model/check")
 def check_probability(dict_row : RowInput):
     csv = LoadCsv()
     probability_data = csv.read_probability_dict()
-    print("probability_data:", probability_data)
-    test = Test_classifier(probability_data)
-    print(test.check_probability(dict_row.row))
-    return {}
+    data_frame = csv.read_data_csv()
+    test = Test_classifier(probability_data, data_frame)
+    result = test.check_probability(dict_row.row)
+    return {"result":result}
 
 @app.get("/csv/preview")
 def return_data_frame():
