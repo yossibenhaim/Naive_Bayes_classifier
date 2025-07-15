@@ -1,4 +1,6 @@
 import pandas as pd
+import requests
+from io import StringIO
 import json
 
 class LoadCsv:
@@ -8,7 +10,16 @@ class LoadCsv:
         self._name_probability_dict = "probability.json"
 
     def load_csv(self, url):
-        return pd.read_csv(fr"{url}")
+        response = requests.get(url)
+        if response.status_code == 200:
+            try:
+                data = pd.read_csv(StringIO(response.text))
+                return data
+            except Exception as e:
+                raise ValueError(f"Failed to parse CSV: {e}")
+        else:
+            raise ConnectionError(f"Failed to load CSV. Status code: {response.status_code}")
+
 
     def saving_data_csv(self, data):
         data.to_csv(self._name_csv)
