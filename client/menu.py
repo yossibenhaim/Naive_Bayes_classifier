@@ -1,4 +1,4 @@
-from manager import Manager
+from client.manager import Manager
 
 
 class Menu:

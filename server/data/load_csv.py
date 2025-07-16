@@ -3,6 +3,7 @@ import requests
 from io import StringIO
 import json
 
+
 class LoadCsv:
 
     def __init__(self):
@@ -43,7 +44,7 @@ class LoadCsv:
         Args:
             data (pandas.DataFrame): Data to save.
         """
-        data.to_csv(self._name_csv)
+        data.to_csv(rf"storage/{self._name_csv}")
 
     def read_data_csv(self):
         """
@@ -52,7 +53,7 @@ class LoadCsv:
         Returns:
             pandas.DataFrame: The data.
         """
-        return pd.read_csv(self._name_csv, index_col=0)
+        return pd.read_csv(fr"storage/{self._name_csv}", index_col=0)
 
     def saving_probability(self, data):
         """
@@ -61,7 +62,7 @@ class LoadCsv:
         Args:
             data (dict): Probability data.
         """
-        with open(self._name_probability_dict, "w") as file:
+        with open(fr"storage/{self._name_probability_dict}", "w") as file:
             json.dump(data, file)
 
     def read_probability_dict(self):
@@ -71,6 +72,6 @@ class LoadCsv:
         Returns:
             dict: Probability data.
         """
-        with open(self._name_probability_dict, "r") as file:
+        with open(fr"storage/{self._name_probability_dict}", "r") as file:
             data = json.load(file)
         return data
