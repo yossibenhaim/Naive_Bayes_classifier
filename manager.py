@@ -1,9 +1,9 @@
 import pandas as pd
 import requests
-import logging
-
-logging.basicConfig(level=logging.INFO, filename="logs/log.log", )
-logger = logging.getLogger(__name__)
+# import logging
+#
+# logging.basicConfig(level=logging.INFO, filename="logs/log.log", )
+# logger = logging.getLogger(__name__)
 
 
 class Manager:
