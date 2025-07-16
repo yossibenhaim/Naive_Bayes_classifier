@@ -1,8 +1,6 @@
 from manager import Manager
 
 
-from manager import Manager
-
 class Menu:
 
     def __init__(self, manager):

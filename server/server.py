@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from server.Probability_Classifier import Probability
-from server.Test_for_classifier import Test_classifier
-from server.Cleaning_data import Cleaning_data
-from server.load_csv import LoadCsv
+from Probability_Classifier import Probability
+from Test_for_classifier import Test_classifier
+from Cleaning_data import Cleaning_data
+from load_csv import LoadCsv
 from pydantic import BaseModel
 
 app = FastAPI()
