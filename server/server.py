@@ -47,7 +47,6 @@ def test_probability():
     probability_data = csv.read_probability_dict()
     data_frame = csv.read_data_csv()
     test = Test_classifier(probability_data, data_frame)
-    print(csv.read_data_csv())
     result = test.test(csv.read_data_csv())
     return {"result": result}
 
