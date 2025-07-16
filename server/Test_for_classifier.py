@@ -1,15 +1,31 @@
-
-
 class Test_classifier:
+
     def __init__(self, data_dict, data_frame):
+        """
+        Initializes with the probability dictionary and dataset.
+
+        Args:
+            data_dict (dict): The trained probability dictionary.
+            data_frame (pandas.DataFrame): The dataset used for reference.
+        """
         self._data_dict = data_dict
         self._data_frame = data_frame
 
     def check_probability(self, dict_row):
+        """
+        Classifies a single input row using the Naive Bayes model.
+
+        Args:
+            dict_row (dict): Dictionary with feature values for classification.
+
+        Returns:
+            str: Predicted class label.
+        """
         if not dict_row:
             return "error"
         if not self._data_dict:
             return "Error!"
+
         class_probs = {}
         for class_name in self._data_dict:
             prob = 1
@@ -24,10 +40,20 @@ class Test_classifier:
             prior = class_count / total_count
             prob *= prior
             class_probs[class_name] = prob
+
         best_class = max(class_probs, key=class_probs.get)
         return best_class
 
     def test(self, data_frame):
+        """
+        Tests classification accuracy on the dataset.
+
+        Args:
+            data_frame (pandas.DataFrame): Data to test.
+
+        Returns:
+            str: Accuracy percentage formatted string.
+        """
         count = 0
         for idx, row in data_frame.iterrows():
             result = self.check_probability(row.to_dict())
@@ -35,7 +61,3 @@ class Test_classifier:
                 count += 1
         accuracy = count / len(data_frame)
         return f"Accuracy: {accuracy * 100:.2f}%"
-
-
-
-
