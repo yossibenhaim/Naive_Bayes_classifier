@@ -1,11 +1,21 @@
 from manager import Manager
 
+
 class Menu:
 
     def __init__(self, manager):
+        """
+        Initializes Menu with a Manager instance.
+
+        Args:
+            manager (Manager): The Manager instance to interact with.
+        """
         self.Manager = manager
 
     def run_menu(self):
+        """
+        Main menu loop: lets user load CSV, go to manager menu or exit.
+        """
         stop_loop = True
         while stop_loop:
             self.print_menu()
@@ -18,6 +28,9 @@ class Menu:
                 stop_loop = False
 
     def run_menu_manager(self):
+        """
+        Manager submenu loop: allows data printing, cleaning, training, testing, checking, or exit.
+        """
         stop_loop = True
         while stop_loop:
             self.print_menu_manager()
@@ -35,14 +48,19 @@ class Menu:
             elif choice == "6":
                 stop_loop = False
 
-
     def print_menu(self):
+        """
+        Prints main menu options.
+        """
         print("\nMenu:")
         print("1. Load CSV file")
         print("2. manager menu")
         print("3. exit\n")
 
     def print_menu_manager(self):
+        """
+        Prints manager submenu options.
+        """
         print("\nMenu:")
         print("1. Print CSV file")
         print("2. Clean data (choose index column)")
