@@ -8,11 +8,17 @@ import requests
 class Manager:
 
     def __init__(self):
+        """
+        Initializes the Manager with the base URL of the local API.
+        """
         self._url = "http://127.0.0.1:8000"
 
     def load_csv_and_process(self):
         """
-        Prompts the user for a CSV URL, sends it to the server to load and save locally.
+        Prompts the user for a CSV URL and sends it to the server to load and save locally.
+
+        Returns:
+            requests.Response | str: The response from the server or "error:" on failure.
         """
         url = {"url" : input("send your a url")}
         response = requests.post(fr"{self._url}/csv/load", json=url)
@@ -20,7 +26,10 @@ class Manager:
 
     def clean_data(self):
         """
-        Prompts the user to choose a column to use as index and sends it to the server for cleaning.
+        Prompts the user to choose a column to use as index and sends it to the server.
+
+        Returns:
+            requests.Response | str: The response from the server or "error:" on failure.
         """
         name_column = {"column": self.choice_column()}
         response = requests.post(fr"{self._url}/csv/columns", json=name_column)
@@ -28,14 +37,20 @@ class Manager:
 
     def create_probability(self):
         """
-        Sends a request to the server to train the Naive Bayes model and save the probabilities.
+        Sends a request to train the Naive Bayes model.
+
+        Returns:
+            requests.Response | str: The response from the server or "error:" on failure.
         """
         response = requests.post(fr"{self._url}/model/train")
         return response if response.status_code == 200 else "error:"
 
     def test_probability(self):
         """
-        Sends a request to test the accuracy of the model using the current dataset.
+        Sends a request to evaluate the model accuracy.
+
+        Returns:
+            requests.Response | str: The response from the server or "error:" on failure.
         """
         response = requests.post(fr"{self._url}/model/test")
         print(response.json()["result"])
@@ -43,7 +58,10 @@ class Manager:
 
     def check_probability(self):
         """
-        Prompts the user to input values for a new row and sends it to the server for classification.
+        Prompts the user to input a new row and checks the predicted class.
+
+        Returns:
+            requests.Response | str: The response from the server or "error:" on failure.
         """
         dict_row = {"row": self.create_dict_to_check()}
         response = requests.post(fr"{self._url}/model/check", json=dict_row)
@@ -52,7 +70,10 @@ class Manager:
 
     def return_data_frame(self):
         """
-        Requests the current dataset (DataFrame) from the server and returns it as a pandas DataFrame.
+        Gets the current dataset from the server and returns it as a pandas DataFrame.
+
+        Returns:
+            pandas.DataFrame | None: The current DataFrame, or None if the request failed.
         """
         response = requests.get(fr"{self._url}/csv/preview")
         if response.status_code == 200:
@@ -63,13 +84,15 @@ class Manager:
 
     def create_dict_to_check(self):
         """
-        Prompts the user to input values for each column in the dataset, to create a dictionary for testing classification.
+        Prompts the user to enter values for each column to create a test input.
+
+        Returns:
+            dict | str: A dictionary of user input values or "error:" if DataFrame is unavailable.
         """
         dataframe = self.return_data_frame()
         if dataframe is not None:
             dict_row = {}
             columns = dataframe.columns
-
             for column in columns:
                 if column == "id":
                     continue
@@ -83,7 +106,10 @@ class Manager:
 
     def choice_column(self):
         """
-        Prompts the user to choose one column from the DataFrame to set as the new index.
+        Prompts the user to choose one of the dataset's columns to be used as index.
+
+        Returns:
+            str: The chosen column name.
         """
         dataframe = self.return_data_frame()
         columns = dataframe.columns
