@@ -7,19 +7,34 @@
 ## 📦 מבנה הפרויקט
 
 ```
-Naive_Bayes_classifier1/
+
+📁 Naive_Bayes_classifier
+├── 📁 client
+│   ├── manager.py # Handles user interaction with the server
+│   └── menu.py # CLI menu system to access model features
 │
-├── server/                      # צד השרת
-│   ├── server.py               # FastAPI endpoints
-│   ├── load_csv.py             # ניהול קבצי CSV ו־JSON
-│   ├── Cleaning_data.py        # עיבוד נתונים ובחירת עמודת אינדקס
-│   ├── Probability_Classifier.py # יצירת מילון הסתברויות Naive Bayes
-│   ├── Test_for_classifier.py  # בדיקת דיוק וביצוע תחזיות
-│   └── __init__.py
+├── 📁 server
+│   ├── 📁 api
+│   │   ├── server.py # FastAPI application with endpoints
+│   │   └── init.py
+│   │
+│   ├── 📁 data
+│   │   ├── Cleaning_data.py # Set index column
+│   │   ├── load_csv.py # Load, save and read CSV and probability files
+│   │   └── init.py
+│   │
+│   ├── 📁 model
+│   │   ├── Probability_Classifier.py # Training: builds probability dict
+│   │   ├── Test_for_classifier.py # Testing: checks and evaluates prediction
+│   │   └── init.py
+│   │
+│   └── init.py
 │
-├── menu.py                     # תפריט CLI אינטראקטיבי
-├── manager.py                  # לקוח - מבצע קריאות לשרת
-└── README.md
+├── 📁 storage
+│   ├── data.csv # Stored CSV data
+│   └── probability.json # Saved probability dictionary
+│
+└── README.md (you are here)
 ```
 
 ---
