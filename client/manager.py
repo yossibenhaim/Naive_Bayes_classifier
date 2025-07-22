@@ -1,5 +1,7 @@
 import pandas as pd
 import requests
+
+
 # import logging
 #
 # logging.basicConfig(level=logging.INFO, filename="logs/log.log", )
@@ -11,7 +13,7 @@ class Manager:
         """
         Initializes the Manager with the base URL of the local API.
         """
-        self._url = "http://127.0.0.1:8000"
+        self._url = "http://127.0.0.1:8050"
 
     def load_csv_and_process(self):
         """
@@ -20,7 +22,7 @@ class Manager:
         Returns:
             requests.Response | str: The response from the server or "error:" on failure.
         """
-        url = {"url" : input("send your a url")}
+        url = {"url": input("send your a url")}
         response = requests.post(fr"{self._url}/csv/load", json=url)
         return response if response.status_code == 200 else "error:"
 
