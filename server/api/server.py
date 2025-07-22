@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from server.model.Probability_Classifier import Probability
 from server.model.Test_for_classifier import Test_classifier
 from server.data.Cleaning_data import Cleaning_data
 from server.data.load_csv import LoadCsv
