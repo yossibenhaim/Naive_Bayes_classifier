@@ -120,3 +120,20 @@ def return_data_frame():
         return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
     else:
         return {"result": data.reset_index().to_dict("records"), "name_index": "index"}
+
+
+@app.get("/probability")
+def return_probability():
+    """
+    Returns the current dataset as a list of dictionaries for preview.
+
+    Returns:
+        dict: A dictionary with the dataset and index column name.
+    """
+    csv = LoadCsv()
+    data = csv.read_data_csv()
+    name_index = data.index.name
+    if name_index:
+        return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
+    else:
+        return {"result": data.reset_index().to_dict("records"), "name_index": "index"}

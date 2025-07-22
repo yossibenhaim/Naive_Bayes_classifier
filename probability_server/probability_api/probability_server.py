@@ -1,122 +1,66 @@
 from fastapi import FastAPI
-from server.model.Test_for_classifier import Test_classifier
-from server.data.Cleaning_data import Cleaning_data
-from server.data.load_csv import LoadCsv
+from ..probability_model.classified_probability import Classifier
 from pydantic import BaseModel
+import requests
+import pandas as pd
+from io import StringIO
 
 app = FastAPI()
+classifier = None
 
 
 class CsvUrl(BaseModel):
+    """
+    Model containing the URL to a CSV file.
+
+    Args:
+        url (str): CSV file URL.
+    """
     url: str
 
 
-class CsvColumn(BaseModel):
-    column: str
-
-
 class RowInput(BaseModel):
+    """
+    Model for a data row to classify.
+
+    Args:
+        row (dict): Dictionary of column-value pairs.
+    """
     row: dict
 
 
-@app.post("/csv/load")
-def read_csv(url: CsvUrl):
+@app.post("/read/classified")
+def read_classified(url: CsvUrl):
     """
-    Loads a CSV file from a given URL and saves it to the local system.
+    Initialize classifier using probabilities and CSV data.
 
     Args:
-        url (CsvUrl): An object containing the URL of the CSV file.
+        url (CsvUrl): URL to CSV file (currently unused).
 
     Returns:
-        dict: Empty dictionary on success.
+        dict: Confirmation message.
     """
-    csv = LoadCsv()
-    data = csv.load_csv(url.url)
-    csv.saving_data_csv(data)
-    return {}
-
-
-@app.post("/csv/columns")
-def clean_data_from(column: CsvColumn):
-    """
-    Sets the specified column as the index of the loaded CSV data.
-
-    Args:
-        column (CsvColumn): Object with the column name to set as index.
-
-    Returns:
-        dict: Empty dictionary on success.
-    """
-    csv = LoadCsv()
-    clean = Cleaning_data(csv.read_data_csv())
-    new_data = clean.cleaning_data(column.column)
-    csv.saving_data_csv(new_data)
-    return {}
-
-
-@app.post("/model/train")
-def post_probability():
-    """
-    Trains a Naive Bayes classifier on the loaded dataset and saves the result.
-
-    Returns:
-        dict: Empty dictionary on success.
-    """
-    csv = LoadCsv()
-    data = csv.read_data_csv()
-    probability = Probability()
-    probability_data = probability.create_probability(data)
-    csv.saving_probability(probability_data)
-    return {}
-
-
-@app.post("/model/test")
-def test_probability():
-    """
-    Evaluates the classifier's accuracy on the current dataset.
-
-    Returns:
-        dict: Dictionary containing the accuracy result.
-    """
-    csv = LoadCsv()
-    probability_data = csv.read_probability_dict()
-    data_frame = csv.read_data_csv()
-    test = Test_classifier(probability_data, data_frame)
-    result = test.test(data_frame)
-    return {"result": result}
+    global classifier
+    classified = requests.get("http://127.0.0.1:8050/probability").json()
+    data = requests.get("http://127.0.0.1:8050/csv/preview").text
+    data_frame = pd.read_csv(StringIO(data))
+    classifier = Classifier(classified, data_frame)
+    return {"message": "Classifier initialized"}
 
 
 @app.post("/model/check")
 def check_probability(dict_row: RowInput):
     """
-    Classifies a new row based on user input using the trained model.
+    Classify a new data row.
 
     Args:
-        dict_row (RowInput): Object containing a dictionary of values to classify.
+        dict_row (RowInput): Input data row.
 
     Returns:
-        dict: Dictionary containing the predicted class.
+        dict: Classification result.
     """
-    csv = LoadCsv()
-    probability_data = csv.read_probability_dict()
-    data_frame = csv.read_data_csv()
-    test = Test_classifier(probability_data, data_frame)
-    result = test.check_probability(dict_row.row)
+    global classifier
+    if classifier is None:
+        read_classified(CsvUrl(url="http://127.0.0.1:8050/data.csv"))
+    result = classifier.check_probability(dict_row.row)
     return {"result": result}
-
-
-@app.get("/csv/preview")
-def return_data_frame():
-    """
-    Returns the current dataset as a list of dictionaries for preview.
-
-    Returns:
-        dict: A dictionary with the dataset and index column name.
-    """
-    csv = LoadCsv()
-    data = csv.read_data_csv()
-    name_index = data.index.name
-    if name_index:
-        return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
-    else:
-        return {"result": data.reset_index().to_dict("records"), "name_index": "index"}
