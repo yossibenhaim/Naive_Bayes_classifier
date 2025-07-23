@@ -29,21 +29,19 @@ class RowInput(BaseModel):
     row: dict
 
 
-@app.post("/read/classified")
-def read_classified(url: CsvUrl):
+@app.get("/read/classified")
+def read_classified():
     """
     Initialize classifier using probabilities and CSV data.
-
-    Args:
-        url (CsvUrl): URL to CSV file (currently unused).
 
     Returns:
         dict: Confirmation message.
     """
     global classifier
-    classified = requests.get("http://127.0.0.1:8050/probability").json()
-    data = requests.get("http://127.0.0.1:8050/csv/preview").text
-    data_frame = pd.read_csv(StringIO(data))
+    classified = requests.get("http://127.0.0.1:8000/probability").json()
+    data = requests.get("http://127.0.0.1:8000/csv/preview").json()
+    data_frame = pd.DataFrame(data["result"])
+    data_frame = data_frame.set_index(data["name_index"])
     classifier = Classifier(classified, data_frame)
     return {"message": "Classifier initialized"}
 
@@ -61,6 +59,6 @@ def check_probability(dict_row: RowInput):
     """
     global classifier
     if classifier is None:
-        read_classified(CsvUrl(url="http://127.0.0.1:8050/data.csv"))
+        read_classified()
     result = classifier.check_probability(dict_row.row)
     return {"result": result}

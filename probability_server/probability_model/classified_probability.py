@@ -21,13 +21,14 @@ class Classifier:
         Returns:
             str: Predicted class label.
         """
+
         if not dict_row:
             return "error"
         if not self._data_dict:
             return "Error!"
 
         class_probs = {}
-        for class_name in self._data_dict:
+        for class_name in self._data_frame.index:
             prob = 1
             for column, value in dict_row.items():
                 try:
@@ -41,5 +42,4 @@ class Classifier:
             prob *= prior
             class_probs[class_name] = prob
 
-        best_class = max(class_probs, key=class_probs.get)
-        return best_class
+        return class_probs

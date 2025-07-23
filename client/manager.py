@@ -13,7 +13,8 @@ class Manager:
         """
         Initializes the Manager with the base URL of the local API.
         """
-        self._url = "http://127.0.0.1:8050"
+        self._url = "http://127.0.0.1:8000"
+        self._url_classifier = "http://127.0.0.1:8001"
 
     def load_csv_and_process(self):
         """
@@ -65,9 +66,9 @@ class Manager:
         Returns:
             requests.Response | str: The response from the server or "error:" on failure.
         """
-        dict_row = {"row": self.create_dict_to_check()}
-        response = requests.post(fr"{self._url}/model/check", json=dict_row)
-        print(response.json()["result"])
+        dict_row = self.create_dict_to_check()
+        response = requests.post(fr"{self._url_classifier}/model/check", json={"row": dict_row})
+        self.print_result_of_classifier(response.json()["result"])
         return response if response.status_code == 200 else "error:"
 
     def return_data_frame(self):
@@ -121,3 +122,8 @@ class Manager:
             if column in columns:
                 stop_loop = False
         return column
+
+    def print_result_of_classifier(self, result):
+        for key, value in result.items():
+            print(f"teh probability of index {key} == {value}")
+        print(f"the big probability in {max(result, key=result.get)}")

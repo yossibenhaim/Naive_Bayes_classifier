@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from server.model.Test_for_classifier import Test_classifier
+from server.model.Probability_Classifier import Probability
 from server.data.Cleaning_data import Cleaning_data
 from server.data.load_csv import LoadCsv
 from pydantic import BaseModel
@@ -86,25 +87,6 @@ def test_probability():
     return {"result": result}
 
 
-@app.post("/model/check")
-def check_probability(dict_row: RowInput):
-    """
-    Classifies a new row based on user input using the trained model.
-
-    Args:
-        dict_row (RowInput): Object containing a dictionary of values to classify.
-
-    Returns:
-        dict: Dictionary containing the predicted class.
-    """
-    csv = LoadCsv()
-    probability_data = csv.read_probability_dict()
-    data_frame = csv.read_data_csv()
-    test = Test_classifier(probability_data, data_frame)
-    result = test.check_probability(dict_row.row)
-    return {"result": result}
-
-
 @app.get("/csv/preview")
 def return_data_frame():
     """
@@ -131,9 +113,5 @@ def return_probability():
         dict: A dictionary with the dataset and index column name.
     """
     csv = LoadCsv()
-    data = csv.read_data_csv()
-    name_index = data.index.name
-    if name_index:
-        return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
-    else:
-        return {"result": data.reset_index().to_dict("records"), "name_index": "index"}
+    probability_data = csv.read_probability_dict()
+    return {"result": probability_data}
