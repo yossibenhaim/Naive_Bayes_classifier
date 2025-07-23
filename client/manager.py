@@ -25,6 +25,10 @@ class Manager:
         """
         url = {"url": input("send your a url")}
         response = requests.post(fr"{self._url}/csv/load", json=url)
+        self.clean_data()
+        self.create_probability()
+        self.test_probability()
+
         return response if response.status_code == 200 else "error:"
 
     def clean_data(self):

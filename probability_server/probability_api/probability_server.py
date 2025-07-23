@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from ..probability_model.classified_probability import Classifier
+from probability_model.classified_probability import Classifier
 from pydantic import BaseModel
 import requests
 import pandas as pd
@@ -38,11 +38,11 @@ def read_classified():
         dict: Confirmation message.
     """
     global classifier
-    classified = requests.get("http://127.0.0.1:8000/probability").json()
-    data = requests.get("http://127.0.0.1:8000/csv/preview").json()
+    classified = requests.get("http://naive-bayes-container-server:8000/probability").json()
+    data = requests.get("http://naive-bayes-container-server:8000/csv/preview").json()
     data_frame = pd.DataFrame(data["result"])
     data_frame = data_frame.set_index(data["name_index"])
-    classifier = Classifier(classified, data_frame)
+    classifier = Classifier(classified["result"], data_frame)
     return {"message": "Classifier initialized"}
 
 

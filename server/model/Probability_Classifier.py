@@ -39,7 +39,7 @@ class Probability:
         """
         for current in self._data_dict:
             for column in self._data_frame:
-                if column in ("id", "index", "Index"):
+                if column == "id":
                     continue
                 if column not in self._data_dict[current]:
                     self._data_dict[current][column] = {}
@@ -50,7 +50,7 @@ class Probability:
         """
         for current in self._data_dict:
             for column in self._data_frame:
-                if column in ("id", "index", "Index", "Unnamed: 0"):
+                if column == "id":
                     continue
                 value_counts = self._data_frame.loc[self._data_frame.index == current, column].value_counts()
                 for row, value in value_counts.items():
