@@ -28,7 +28,7 @@ class Classifier:
             return "Error!"
 
         class_probs = {}
-        for class_name in self._data_frame.index:
+        for class_name in self._data_dict.keys():
             prob = 1
             for column, value in dict_row.items():
                 try:

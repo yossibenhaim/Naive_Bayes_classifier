@@ -78,4 +78,23 @@ class LoadCsv:
         """
         with open(fr"{self._storage_path}{self._name_probability_dict}", "r") as file:
             data = json.load(file)
+        data = self.convert_numeric_keys(data)
         return data
+
+    def convert_numeric_keys(self, d):
+        new_dict = {}
+        for key, value in d.items():
+            if isinstance(key, str) and key.isdigit():
+                new_key = int(key)
+            else:
+                new_key = key
+
+            # רקורסיה על ערכים שהם מילונים
+            if isinstance(value, dict):
+                new_value = self.convert_numeric_keys(value)
+            else:
+                new_value = value
+
+            new_dict[new_key] = new_value
+
+        return new_dict

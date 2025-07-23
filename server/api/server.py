@@ -98,10 +98,9 @@ def return_data_frame():
     csv = LoadCsv()
     data = csv.read_data_csv()
     name_index = data.index.name
-    if name_index:
-        return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
-    else:
-        return {"result": data.reset_index().to_dict("records"), "name_index": "index"}
+    if name_index is None:
+        name_index = "index"
+    return {"result": data.reset_index().to_dict("records"), "name_index": name_index}
 
 
 @app.get("/probability")

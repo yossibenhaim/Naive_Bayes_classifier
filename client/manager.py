@@ -81,7 +81,9 @@ class Manager:
         response = requests.get(fr"{self._url}/csv/preview")
         if response.status_code == 200:
             dataframe = pd.DataFrame(response.json()["result"])
-            dataframe = dataframe.set_index(response.json()["name_index"])
+            name_index = response.json()["name_index"]
+            if name_index in dataframe.columns:
+                dataframe = dataframe.set_index(response.json()["name_index"])
             return dataframe
         return None
 
@@ -97,7 +99,7 @@ class Manager:
             dict_row = {}
             columns = dataframe.columns
             for column in columns:
-                if column == "id":
+                if column in ("id", "index", "Index"):
                     continue
                 unique_values = dataframe[column].unique()
                 print(f"\n {column}: {list(unique_values)}")
