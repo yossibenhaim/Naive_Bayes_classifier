@@ -22,6 +22,7 @@ class Probability:
         self.create_dict_index()
         self.create_dict_columns()
         self.create_dict_values()
+        print(self._data_dict)
         return self._data_dict
 
     def create_dict_index(self):

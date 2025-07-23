@@ -13,7 +13,8 @@ class Manager:
         """
         Initializes the Manager with the base URL of the local API.
         """
-        self._url = "http://127.0.0.1:8050"
+        self._url = "http://127.0.0.1:8000"
+        self._url_classifier = "http://127.0.0.1:8001"
 
     def load_csv_and_process(self):
         """
@@ -24,6 +25,10 @@ class Manager:
         """
         url = {"url": input("send your a url")}
         response = requests.post(fr"{self._url}/csv/load", json=url)
+        self.clean_data()
+        self.create_probability()
+        self.test_probability()
+
         return response if response.status_code == 200 else "error:"
 
     def clean_data(self):
@@ -65,9 +70,9 @@ class Manager:
         Returns:
             requests.Response | str: The response from the server or "error:" on failure.
         """
-        dict_row = {"row": self.create_dict_to_check()}
-        response = requests.post(fr"{self._url}/model/check", json=dict_row)
-        print(response.json()["result"])
+        dict_row = self.create_dict_to_check()
+        response = requests.post(fr"{self._url_classifier}/model/check", json={"row": dict_row})
+        self.print_result_of_classifier(response.json()["result"])
         return response if response.status_code == 200 else "error:"
 
     def return_data_frame(self):
@@ -80,7 +85,9 @@ class Manager:
         response = requests.get(fr"{self._url}/csv/preview")
         if response.status_code == 200:
             dataframe = pd.DataFrame(response.json()["result"])
-            dataframe = dataframe.set_index(response.json()["name_index"])
+            name_index = response.json()["name_index"]
+            if name_index in dataframe.columns:
+                dataframe = dataframe.set_index(response.json()["name_index"])
             return dataframe
         return None
 
@@ -96,7 +103,7 @@ class Manager:
             dict_row = {}
             columns = dataframe.columns
             for column in columns:
-                if column == "id":
+                if column in ("id", "index", "Index"):
                     continue
                 unique_values = dataframe[column].unique()
                 print(f"\n {column}: {list(unique_values)}")
@@ -121,3 +128,8 @@ class Manager:
             if column in columns:
                 stop_loop = False
         return column
+
+    def print_result_of_classifier(self, result):
+        for key, value in result.items():
+            print(f"teh probability of index {key} == {value}")
+        print(f"the big probability in {max(result, key=result.get)}")

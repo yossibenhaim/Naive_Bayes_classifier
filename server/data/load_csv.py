@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from io import StringIO
 import json
+import os
 
 
 class LoadCsv:
@@ -12,7 +13,7 @@ class LoadCsv:
         """
         self._name_csv = "data.csv"
         self._name_probability_dict = "probability.json"
-        self._storage_path = "/app/server/data/storage/"
+        self._storage_path = "data/storage/"
 
     def load_csv(self, url):
         """
@@ -54,6 +55,8 @@ class LoadCsv:
         Returns:
             pandas.DataFrame: The data.
         """
+        print(os.path.abspath("storage/data.csv"))
+
         return pd.read_csv(fr"{self._storage_path}{self._name_csv}", index_col=0)
 
     def saving_probability(self, data):
