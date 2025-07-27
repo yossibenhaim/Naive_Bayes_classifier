@@ -1,3 +1,8 @@
+import logging
+
+main_server_logger = logging.getLogger("main_server_logger")
+
+
 class Cleaning_data:
 
     def __init__(self, data_frame):
@@ -8,6 +13,7 @@ class Cleaning_data:
             data_frame (pandas.DataFrame): The DataFrame to clean.
         """
         self.data_frame = data_frame
+        main_server_logger.info(f"Cleaning_data initialized with DataFrame shape: {data_frame.shape}")
 
     def cleaning_data(self, name_column):
         """
@@ -18,10 +24,14 @@ class Cleaning_data:
 
         Returns:
             pandas.DataFrame: DataFrame with new index set.
+
+        Raises:
+            KeyError: If the specified column does not exist.
         """
-        data_frame = self.data_frame.set_index(name_column)
-        return data_frame
-
-
-
-
+        try:
+            data_frame = self.data_frame.set_index(name_column)
+            main_server_logger.info(f"Set column '{name_column}' as DataFrame index.")
+            return data_frame
+        except KeyError:
+            main_server_logger.error(f"Column '{name_column}' not found in DataFrame columns.")
+            raise
