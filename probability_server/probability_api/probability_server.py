@@ -1,30 +1,39 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from probability_model.classified_probability import Classifier
 from pydantic import BaseModel
 import requests
 import pandas as pd
-from io import StringIO
+import logging
 
 app = FastAPI()
 classifier = None
 
+classifier_logger = logging.getLogger("classifier_logger")
+classifier_logger.setLevel(logging.INFO)
+fh = logging.FileHandler("/probability_server/logs/classifier_server.log")
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+classifier_logger.addHandler(fh)
+
+classifier_logger.info("Classifier server started.")
+
 
 class CsvUrl(BaseModel):
     """
-    Model containing the URL to a CSV file.
+    Pydantic model representing a CSV URL input.
 
-    Args:
-        url (str): CSV file URL.
+    Attributes:
+        url (str): URL pointing to the CSV file.
     """
     url: str
 
 
 class RowInput(BaseModel):
     """
-    Model for a data row to classify.
+    Pydantic model representing a single data row for classification.
 
-    Args:
-        row (dict): Dictionary of column-value pairs.
+    Attributes:
+        row (dict): Dictionary with column-value pairs representing a data row.
     """
     row: dict
 
@@ -32,33 +41,70 @@ class RowInput(BaseModel):
 @app.get("/read/classified")
 def read_classified():
     """
-    Initialize classifier using probabilities and CSV data.
+    Initialize the Naive Bayes classifier by fetching probabilities and dataset from an external service.
 
     Returns:
-        dict: Confirmation message.
+        dict: Confirmation message upon successful initialization.
+
+    Raises:
+        HTTPException: If external requests fail or data processing encounters an error.
     """
     global classifier
-    classified = requests.get("http://naive-bayes-container-server:8000/probability").json()
-    data = requests.get("http://naive-bayes-container-server:8000/csv/preview").json()
-    data_frame = pd.DataFrame(data["result"])
-    data_frame = data_frame.set_index(data["name_index"])
-    classifier = Classifier(classified["result"], data_frame)
-    return {"message": "Classifier initialized"}
+    try:
+        classifier_logger.info("Fetching classified probabilities from external service.")
+        classified_response = requests.get("http://naive-bayes-container-server:8000/probability", timeout=10)
+        classified_response.raise_for_status()
+        classified = classified_response.json()
+
+        classifier_logger.info("Fetching CSV preview data from external service.")
+        data_response = requests.get("http://naive-bayes-container-server:8000/csv/preview", timeout=10)
+        data_response.raise_for_status()
+        data = data_response.json()
+
+        data_frame = pd.DataFrame(data["result"])
+        data_frame = data_frame.set_index(data["name_index"])
+
+        classifier = Classifier(classified["result"], data_frame)
+        classifier_logger.info("Classifier initialized successfully.")
+        return {"message": "Classifier initialized"}
+
+    except requests.exceptions.RequestException as e:
+        classifier_logger.error(f"Request error during classifier initialization: {e}")
+        raise HTTPException(status_code=503, detail="Failed to fetch data from external service.")
+
+    except (KeyError, ValueError) as e:
+        classifier_logger.error(f"Data processing error during classifier initialization: {e}")
+        raise HTTPException(status_code=500, detail="Invalid data received from external service.")
+
+    except Exception as e:
+        classifier_logger.error(f"Unexpected error during classifier initialization: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error during classifier initialization.")
 
 
 @app.post("/model/check")
 def check_probability(dict_row: RowInput):
     """
-    Classify a new data row.
+    Classify a new input data row using the initialized classifier.
 
     Args:
-        dict_row (RowInput): Input data row.
+        dict_row (RowInput): Input data row containing column-value pairs.
 
     Returns:
-        dict: Classification result.
+        dict: Classification probabilities result.
+
+    Raises:
+        HTTPException: If classifier is not initialized or classification fails.
     """
     global classifier
-    if classifier is None:
-        read_classified()
-    result = classifier.check_probability(dict_row.row)
-    return {"result": result}
+    try:
+        if classifier is None:
+            classifier_logger.info("Classifier not initialized; initializing now.")
+            read_classified()
+
+        result = classifier.check_probability(dict_row.row)
+        classifier_logger.info("Classification performed successfully.")
+        return {"result": result}
+
+    except Exception as e:
+        classifier_logger.error(f"Error during classification: {e}")
+        raise HTTPException(status_code=500, detail="Failed to classify input data.")

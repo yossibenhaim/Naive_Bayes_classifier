@@ -4,6 +4,8 @@ WORKDIR /probability_server
 
 COPY . /probability_server
 
+RUN mkdir -p /probability_server/logs
+
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 

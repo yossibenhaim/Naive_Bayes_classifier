@@ -3,3 +3,6 @@ requests~=2.32.4
 fastapi~=0.116.1
 pydantic~=2.11.7
 uvicorn
+scikit-learn~=1.7.1
+
+data~=0.4

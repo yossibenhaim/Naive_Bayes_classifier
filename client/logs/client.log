@@ -1,0 +1,77 @@
+2025-07-27 11:30:38,097 - INFO - Client started.
+2025-07-27 11:30:38,097 - INFO - Manager initialized with base URLs.
+2025-07-27 11:30:49,171 - INFO - DataFrame retrieved successfully.
+2025-07-27 11:30:59,066 - INFO - DataFrame retrieved successfully.
+2025-07-27 11:31:11,390 - INFO - Input row created for classification: {'cap-shape': 'ñ', 'cap-surface': 's', 'cap-color': 's', 'bruises': 's', 'odor': 's', 'gill-attachment': 's', 'gill-spacing': 's', 'gill-size': 's', 'gill-color': 's', 'stalk-shape': 's', 'stalk-root': 's', 'stalk-surface-above-ring': 's', 'stalk-surface-below-ring': 's', 'stalk-color-above-ring': 's', 'stalk-color-below-ring': 's', 'veil-type': 's', 'veil-color': 's', 'ring-number': 's', 'ring-type': 's', 'spore-print-color': 's', 'population': 's', 'habitat': 's'}
+2025-07-27 11:31:11,812 - INFO - Classification results printed: highest class 'p'
+2025-07-27 11:31:11,812 - INFO - Classification performed successfully.
+2025-07-27 11:35:53,376 - INFO - Client started.
+2025-07-27 11:35:53,376 - INFO - Manager initialized with base URLs.
+2025-07-27 11:35:53,376 - INFO - Main menu loop started
+2025-07-27 11:35:56,447 - INFO - User selected option: 1
+2025-07-27 11:35:56,447 - INFO - Displaying DataFrame
+2025-07-27 11:35:56,843 - INFO - DataFrame retrieved successfully.
+2025-07-27 11:58:41,654 - INFO - Client started.
+2025-07-27 11:58:41,654 - INFO - Manager initialized with base URLs.
+2025-07-27 11:58:41,654 - INFO - Main menu loop started
+2025-07-27 11:58:46,856 - INFO - User selected option: 1
+2025-07-27 11:58:46,857 - INFO - Displaying DataFrame
+2025-07-27 11:58:47,576 - INFO - DataFrame retrieved successfully.
+2025-07-27 11:58:50,228 - INFO - User selected option: 2
+2025-07-27 11:58:50,228 - INFO - Initiating probability check
+2025-07-27 11:58:50,646 - INFO - DataFrame retrieved successfully.
+2025-07-27 11:59:01,074 - INFO - Input row created for classification: {'cap-shape': 'g', 'cap-surface': 'g', 'cap-color': 'g', 'bruises': 'g', 'odor': 'g', 'gill-attachment': 'g', 'gill-spacing': 'g', 'gill-size': 'g', 'gill-color': 'g', 'stalk-shape': 'g', 'stalk-root': 'gf', 'stalk-surface-above-ring': 'g', 'stalk-surface-below-ring': 'g', 'stalk-color-above-ring': 'g', 'stalk-color-below-ring': 'g', 'veil-type': 'g', 'veil-color': 'g', 'ring-number': 'g', 'ring-type': 'g', 'spore-print-color': 'g', 'population': 'g', 'habitat': 'g'}
+2025-07-27 11:59:01,482 - INFO - Classification results printed: highest class 'e'
+2025-07-27 11:59:01,482 - INFO - Classification performed successfully.
+2025-07-27 11:59:20,358 - INFO - User selected option: 4
+2025-07-27 11:59:20,358 - INFO - Exiting main menu loop
+2025-07-27 12:15:02,187 - INFO - Client started.
+2025-07-27 12:15:02,188 - INFO - Manager initialized with base URLs.
+2025-07-27 12:15:02,188 - INFO - Main menu loop started
+2025-07-27 12:15:04,143 - INFO - User selected option: 1
+2025-07-27 12:15:04,143 - INFO - Displaying DataFrame
+2025-07-27 12:15:04,565 - INFO - DataFrame retrieved successfully.
+2025-07-27 12:17:22,468 - INFO - Client started.
+2025-07-27 12:17:22,468 - INFO - Manager initialized with base URLs.
+2025-07-27 12:17:22,468 - INFO - Main menu loop started
+2025-07-27 12:17:24,810 - INFO - User selected option: 1
+2025-07-27 12:17:24,810 - INFO - Displaying DataFrame
+2025-07-27 12:17:25,241 - INFO - DataFrame retrieved successfully.
+2025-07-27 12:19:01,441 - INFO - User selected option: 3
+2025-07-27 12:19:01,441 - INFO - Loading and processing CSV
+2025-07-27 12:20:06,029 - INFO - Loading CSV from URL: https://drive.google.com/uc?export=download&id=1MrXPYAX0dwQG_x1JjH0l-8kofkvdcNDG
+2025-07-27 12:20:08,590 - INFO - DataFrame retrieved successfully.
+2025-07-27 12:20:21,837 - INFO - User selected index column: class
+2025-07-27 12:20:21,837 - INFO - Selected index column: class
+2025-07-27 12:20:21,885 - INFO - Index column set successfully.
+2025-07-27 12:20:22,097 - INFO - Model training completed successfully.
+2025-07-27 12:20:32,112 - ERROR - Model testing failed: HTTPConnectionPool(host='127.0.0.1', port=8000): Read timed out. (read timeout=10)
+2025-07-27 12:20:32,112 - INFO - CSV loaded and processed successfully.
+2025-07-27 12:20:40,451 - INFO - User selected option: 1
+2025-07-27 12:20:40,452 - INFO - Displaying DataFrame
+2025-07-27 12:20:40,844 - INFO - DataFrame retrieved successfully.
+2025-07-27 12:23:46,396 - INFO - User selected option: 3
+2025-07-27 12:23:46,397 - INFO - Loading and processing CSV
+2025-07-27 12:24:00,036 - INFO - Loading CSV from URL: https://drive.google.com/uc?export=download&id=1MrXPYAX0dwQG_x1JjH0l-8kofkvdcNDG
+2025-07-27 12:24:02,368 - INFO - DataFrame retrieved successfully.
+2025-07-27 12:24:06,431 - INFO - User selected index column: class
+2025-07-27 12:24:06,432 - INFO - Selected index column: class
+2025-07-27 12:24:06,473 - INFO - Index column set successfully.
+2025-07-27 12:24:06,674 - INFO - Model training completed successfully.
+2025-07-27 12:24:16,688 - ERROR - Model testing failed: HTTPConnectionPool(host='127.0.0.1', port=8000): Read timed out. (read timeout=10)
+2025-07-27 12:24:16,688 - INFO - CSV loaded and processed successfully.
+2025-07-27 12:26:33,297 - INFO - Client started.
+2025-07-27 12:26:33,297 - INFO - Manager initialized with base URLs.
+2025-07-27 12:26:33,297 - INFO - Main menu loop started
+2025-07-27 12:26:36,113 - INFO - User selected option: 3
+2025-07-27 12:26:36,113 - INFO - Loading and processing CSV
+2025-07-27 12:26:49,252 - INFO - Loading CSV from URL: https://drive.google.com/uc?export=download&id=1MrXPYAX0dwQG_x1JjH0l-8kofkvdcNDG
+2025-07-27 12:26:52,074 - INFO - DataFrame retrieved successfully.
+2025-07-27 12:26:57,814 - INFO - User selected index column: class
+2025-07-27 12:26:57,815 - INFO - Selected index column: class
+2025-07-27 12:26:57,858 - INFO - Index column set successfully.
+2025-07-27 12:26:58,051 - INFO - Model training completed successfully.
+2025-07-27 12:27:10,070 - INFO - Model test result: Accuracy: 99.20%
+2025-07-27 12:27:10,070 - INFO - CSV loaded and processed successfully.
+2025-07-27 12:27:22,268 - INFO - User selected option: 4
+2025-07-27 12:27:22,268 - INFO - Exiting main menu loop
