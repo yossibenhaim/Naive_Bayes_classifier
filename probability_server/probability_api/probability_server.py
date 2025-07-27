@@ -8,13 +8,14 @@ import logging
 app = FastAPI()
 classifier = None
 
-logging.basicConfig(
-    level=logging.INFO,
-    filename="logs/api.log",
-    filemode="a",
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+classifier_logger = logging.getLogger("classifier_logger")
+classifier_logger.setLevel(logging.INFO)
+fh = logging.FileHandler("logs/classifier_server.log")
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+classifier_logger.addHandler(fh)
+
+classifier_logger.info("Classifier server started.")
 
 
 class CsvUrl(BaseModel):
@@ -50,12 +51,12 @@ def read_classified():
     """
     global classifier
     try:
-        logger.info("Fetching classified probabilities from external service.")
+        classifier_logger.info("Fetching classified probabilities from external service.")
         classified_response = requests.get("http://naive-bayes-container-server:8000/probability", timeout=10)
         classified_response.raise_for_status()
         classified = classified_response.json()
 
-        logger.info("Fetching CSV preview data from external service.")
+        classifier_logger.info("Fetching CSV preview data from external service.")
         data_response = requests.get("http://naive-bayes-container-server:8000/csv/preview", timeout=10)
         data_response.raise_for_status()
         data = data_response.json()
@@ -64,19 +65,19 @@ def read_classified():
         data_frame = data_frame.set_index(data["name_index"])
 
         classifier = Classifier(classified["result"], data_frame)
-        logger.info("Classifier initialized successfully.")
+        classifier_logger.info("Classifier initialized successfully.")
         return {"message": "Classifier initialized"}
 
     except requests.exceptions.RequestException as e:
-        logger.error(f"Request error during classifier initialization: {e}")
+        classifier_logger.error(f"Request error during classifier initialization: {e}")
         raise HTTPException(status_code=503, detail="Failed to fetch data from external service.")
 
     except (KeyError, ValueError) as e:
-        logger.error(f"Data processing error during classifier initialization: {e}")
+        classifier_logger.error(f"Data processing error during classifier initialization: {e}")
         raise HTTPException(status_code=500, detail="Invalid data received from external service.")
 
     except Exception as e:
-        logger.error(f"Unexpected error during classifier initialization: {e}")
+        classifier_logger.error(f"Unexpected error during classifier initialization: {e}")
         raise HTTPException(status_code=500, detail="Internal server error during classifier initialization.")
 
 
@@ -97,13 +98,13 @@ def check_probability(dict_row: RowInput):
     global classifier
     try:
         if classifier is None:
-            logger.info("Classifier not initialized; initializing now.")
+            classifier_logger.info("Classifier not initialized; initializing now.")
             read_classified()
 
         result = classifier.check_probability(dict_row.row)
-        logger.info("Classification performed successfully.")
+        classifier_logger.info("Classification performed successfully.")
         return {"result": result}
 
     except Exception as e:
-        logger.error(f"Error during classification: {e}")
+        classifier_logger.error(f"Error during classification: {e}")
         raise HTTPException(status_code=500, detail="Failed to classify input data.")
