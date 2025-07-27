@@ -10,7 +10,7 @@ import logging
 
 main_server_logger = logging.getLogger("main_server_logger")
 main_server_logger.setLevel(logging.INFO)
-fh = logging.FileHandler("logs/main_server.log")
+fh = logging.FileHandler("/server/logs/main_server.log")
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 main_server_logger.addHandler(fh)

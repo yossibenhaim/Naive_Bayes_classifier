@@ -95,7 +95,7 @@ class Manager:
             requests.Response or str: Server response or "error:" on failure.
         """
         try:
-            response = requests.post(f"{self._url}/model/test", timeout=10)
+            response = requests.post(f"{self._url}/model/test", timeout=100)
             response.raise_for_status()
             result = response.json().get("result", None)
             if result is not None:

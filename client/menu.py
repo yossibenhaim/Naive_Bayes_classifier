@@ -1,7 +1,5 @@
 import logging
-from client.manager import Manager
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from client.manager import Manager, client_logger
 
 
 class Menu:
@@ -20,25 +18,25 @@ class Menu:
         Runs the main menu loop.
         """
         stop_loop = True
-        logging.info("Main menu loop started")
+        client_logger.info("Main menu loop started")
         while stop_loop:
             self.print_menu()
             choice = input("send your choice\n")
-            logging.info(f"User selected option: {choice}")
+            client_logger.info(f"User selected option: {choice}")
             if choice == "1":
-                logging.info("Displaying DataFrame")
+                client_logger.info("Displaying DataFrame")
                 print(self.Manager.return_data_frame())
             elif choice == "2":
-                logging.info("Initiating probability check")
+                client_logger.info("Initiating probability check")
                 self.Manager.check_probability()
             elif choice == "3":
-                logging.info("Loading and processing CSV")
+                client_logger.info("Loading and processing CSV")
                 self.Manager.load_csv_and_process()
             elif choice == "4":
-                logging.info("Exiting main menu loop")
+                client_logger.info("Exiting main menu loop")
                 stop_loop = False
             else:
-                logging.warning(f"Invalid choice: {choice}")
+                client_logger.warning(f"Invalid choice: {choice}")
 
     def print_menu(self):
         """

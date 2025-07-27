@@ -10,7 +10,7 @@ classifier = None
 
 classifier_logger = logging.getLogger("classifier_logger")
 classifier_logger.setLevel(logging.INFO)
-fh = logging.FileHandler("logs/classifier_server.log")
+fh = logging.FileHandler("/probability_server/logs/classifier_server.log")
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
 classifier_logger.addHandler(fh)

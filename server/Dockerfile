@@ -4,6 +4,8 @@ WORKDIR /server
 
 COPY . /server
 
+RUN mkdir -p /server/logs
+
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
