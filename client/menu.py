@@ -1,20 +1,19 @@
-from client.manager import Manager
-
-
 class Menu:
 
     def __init__(self, manager):
         """
-        Initializes Menu with a Manager instance.
+        Initializes an instance of the Menu class with a given Manager instance.
 
         Args:
-            manager (Manager): The Manager instance to interact with.
+            manager (Manager): The Manager instance used to interact with data and the server.
         """
         self.Manager = manager
 
     def run_menu(self):
         """
-        Main menu loop: lets user load CSV, go to manager menu or exit.
+        Runs the main menu loop:
+        Allows the user to choose between viewing the DataFrame, checking probabilities,
+        loading and processing a CSV file, or exiting the program.
         """
         stop_loop = True
         while stop_loop:
@@ -31,7 +30,7 @@ class Menu:
 
     def print_menu(self):
         """
-        Prints the main menu options to the console.
+        Displays the main menu options to the user.
         """
         print("\n--- Main Menu ---")
         print("1. View Data Frame")
@@ -39,8 +38,3 @@ class Menu:
         print("3. Load and Process CSV")
         print("4. Exit")
         print("-----------------\n")
-
-
-manager = Manager()
-a = Menu(manager)
-a.run_menu()
